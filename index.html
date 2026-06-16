@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RepayTrack | Installment & Accounting Manager</title>
+    <meta name="description" content="A premium offline-first micro-finance accounting tool and weekly installment tracker. Keep client ledgers secure, search records instantly, and calculate capital metrics.">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ══════════════════ LOGIN SCREEN ══════════════════ -->
+    <div id="login-screen" class="login-screen">
+
+        <div class="login-orb login-orb-1"></div>
+        <div class="login-orb login-orb-2"></div>
+        <div class="login-orb login-orb-3"></div>
+
+        <!-- Step 1: Name + Mobile -->
+        <div class="login-card" id="login-step-1">
+            <div class="login-brand">
+                <div class="login-brand-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <span class="login-brand-name">RepayTrack</span>
+            </div>
+
+            <div class="login-heading">
+                <h2>Welcome Back</h2>
+                <p>Sign in to access your client ledgers</p>
+            </div>
+
+            <form id="form-login-step1" novalidate>
+                <div class="login-field-group">
+                    <label for="login-name">Your Name</label>
+                    <div class="login-input-wrap">
+                        <svg class="login-input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <input type="text" id="login-name" class="login-input" placeholder="Enter your full name" autocomplete="name" required>
+                    </div>
+                    <span class="login-field-error" id="err-name"></span>
+                </div>
+
+                <div class="login-field-group">
+                    <label for="login-mobile">Mobile Number</label>
+                    <div class="login-input-wrap">
+                        <svg class="login-input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                        <input type="tel" id="login-mobile" class="login-input" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" required>
+                    </div>
+                    <span class="login-field-error" id="err-mobile"></span>
+                </div>
+
+                <button type="submit" class="login-btn" id="btn-send-otp">
+                    <span>Login</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                </button>
+            </form>
+
+            <p class="login-privacy-note">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Data stays on your device. No internet required.
+            </p>
+        </div>
+
+    </div>
+    <!-- ══════════════════ END LOGIN ══════════════════ -->
+
+    <div class="container" id="main-app" style="display:none;">
+        <!-- Application Header -->
+        <header>
+            <div class="logo-section">
+                <h1>
+                    <!-- Inline SVG Rupee Book Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary-light);">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                    RepayTrack
+                </h1>
+                <p>Client Installments & Capital Ledger</p>
+            </div>
+            <div class="header-actions">
+                <!-- User identity chip -->
+                <div class="header-user-info" id="header-user-info">
+                    <div class="header-user-avatar" id="header-user-avatar">V</div>
+                    <span id="header-user-name">User</span>
+                </div>
+
+                <button id="btn-profile-trigger" class="btn btn-secondary btn-profile-trigger" title="Update profile" style="display: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    Profile
+                </button>
+
+                <button id="btn-backup-trigger" class="btn btn-secondary" title="Import / Export Data">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                    </svg>
+                    Backup Data
+                </button>
+                <button id="btn-add-client-trigger" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    New Loan
+                </button>
+                <!-- Logout -->
+                <button id="btn-logout" class="btn-logout" title="Sign out">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Dashboard -->
+        <section class="stats-grid" aria-label="Financial summary metrics">
+            <!-- Active Capital -->
+            <div class="glass-card stat-card primary">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Active Capital Given</span>
+                    <span id="stat-total-principal" class="stat-value">₹0</span>
+                </div>
+            </div>
+
+            <!-- Expected Returns -->
+            <div class="glass-card stat-card warning">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Total Expected Return</span>
+                    <span id="stat-total-expected" class="stat-value">₹0</span>
+                </div>
+            </div>
+
+            <!-- Total Collected -->
+            <div class="glass-card stat-card success">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Total Collected</span>
+                    <span id="stat-total-collected" class="stat-value">₹0</span>
+                </div>
+            </div>
+
+            <!-- Remaining Outstanding Balance -->
+            <div class="glass-card stat-card danger">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Remaining Balance</span>
+                    <span id="stat-remaining" class="stat-value">₹0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search and Filter Bar -->
+        <section class="control-bar" aria-label="Ledger search and filters">
+            <div class="search-wrapper">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="search-input" class="search-input" placeholder="Search by name, mobile, or place...">
+            </div>
+            
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="active">Active</button>
+                <button class="filter-btn" data-filter="completed">Fully Paid</button>
+                <button class="filter-btn" data-filter="overdue">Overdue</button>
+            </div>
+        </section>
+
+        <!-- Client Deck Grid -->
+        <main class="clients-grid" id="clients-deck" aria-label="List of client installment files">
+            <!-- Dynamic Injection will happen here -->
+            <div class="empty-state glass-card" id="main-empty-state">
+                <svg class="empty-state-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                <h3 class="empty-state-title">No client accounts found</h3>
+                <p class="empty-state-desc">Get started by creating a client file and entering their weekly installment details.</p>
+                <button id="btn-empty-add-client" class="btn btn-primary">
+                    Add First Client
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+
+    <!-- Add/Edit Client Modal -->
+    <div class="modal-overlay" id="modal-client" role="dialog" aria-modal="true" aria-labelledby="client-modal-title">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 class="modal-title" id="client-modal-title">Register New Loan</h2>
+                <button class="modal-close" id="btn-close-client-modal" aria-label="Close dialog">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <form id="form-client">
+                <input type="hidden" id="field-client-id">
+                <div class="modal-body">
+                    <div class="form-grid">
+                        <!-- Client Name -->
+                        <div class="form-group full-width">
+                            <label for="field-name">Client Name *</label>
+                            <input type="text" id="field-name" required placeholder="Enter client's full name" class="form-input">
+                        </div>
+
+                        <!-- Mobile Number -->
+                        <div class="form-group">
+                            <label for="field-mobile">Mobile Number *</label>
+                            <input type="tel" id="field-mobile" required placeholder="10-digit mobile number" pattern="[0-9]{10,12}" class="form-input">
+                        </div>
+
+                        <!-- Place -->
+                        <div class="form-group">
+                            <label for="field-place">Place / Location *</label>
+                            <input type="text" id="field-place" required placeholder="e.g. Rohini, Sector 5" class="form-input">
+                        </div>
+
+                        <!-- Date Given -->
+                        <div class="form-group">
+                            <label for="field-date">Date of Loan Given *</label>
+                            <input type="date" id="field-date" required class="form-input">
+                        </div>
+
+                        <!-- Weeks Count -->
+                        <div class="form-group">
+                            <label for="field-weeks">Installment Duration (Weeks) *</label>
+                            <input type="number" id="field-weeks" min="1" max="104" value="10" required class="form-input">
+                        </div>
+
+                        <!-- Principal Selection Grid -->
+                        <div class="form-group full-width">
+                            <label>Loan Amount (Rupees) *</label>
+                            <div class="amount-options-grid" id="amount-selector">
+                                <div class="amount-option-card active" data-amount="5000">
+                                    <div class="amount-option-val">₹5K</div>
+                                    <div class="amount-option-return">₹600/wk</div>
+                                </div>
+                                <div class="amount-option-card" data-amount="10000">
+                                    <div class="amount-option-val">₹10K</div>
+                                    <div class="amount-option-return">₹1.2K/wk</div>
+                                </div>
+                                <div class="amount-option-card" data-amount="15000">
+                                    <div class="amount-option-val">₹15K</div>
+                                    <div class="amount-option-return">₹1.8K/wk</div>
+                                </div>
+                                <div class="amount-option-card" data-amount="20000">
+                                    <div class="amount-option-val">₹20K</div>
+                                    <div class="amount-option-return">₹2.4K/wk</div>
+                                </div>
+                            </div>
+                            <div class="custom-amount-row">
+                                <label for="field-custom-amount">Or enter custom amount (₹):</label>
+                                <input type="number" id="field-custom-amount" class="form-input" placeholder="e.g. 25000" min="1000" step="500">
+                            </div>
+                            <input type="hidden" id="field-principal" value="5000">
+                        </div>
+
+                        <!-- Weekly Return Preview -->
+                        <div class="form-group full-width" style="margin-top: -5px;">
+                            <span style="font-size: 0.85rem; color: var(--color-success); font-weight: 600; display: flex; align-items: center; gap: 0.25rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="16" x2="12" y2="12"/>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                </svg>
+                                Calculated Weekly installment: <strong id="lbl-weekly-return-preview">₹600</strong> per week
+                            </span>
+                        </div>
+
+                        <!-- Remarks / Notes -->
+                        <div class="form-group full-width">
+                            <label for="field-remarks">Remarks (Optional)</label>
+                            <textarea id="field-remarks" placeholder="Add additional terms, reference details or notes..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel-client-form">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btn-save-client-form">Save Details</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Client Ledger Details Modal -->
+    <div class="modal-overlay" id="modal-details" role="dialog" aria-modal="true" aria-labelledby="details-modal-title">
+        <div class="modal-container" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2 class="modal-title" id="details-modal-title">Client Installment Ledger</h2>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <button class="modal-close" id="btn-print-ledger" title="Print client ledger receipt">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 6 2 18 2 18 9"/>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                            <rect x="6" y="14" width="12" height="8"/>
+                        </svg>
+                    </button>
+                    <button class="modal-close" id="btn-close-details-modal" aria-label="Close details dialog">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body" id="details-modal-body">
+                <!-- Infuses dynamically, but structural preview: -->
+                <div class="detail-header-card">
+                    <div class="detail-title-block">
+                        <h3 id="lbl-detail-name">Amit Kumar</h3>
+                        <div class="detail-meta-list">
+                            <span class="detail-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                </svg>
+                                <span id="lbl-detail-mobile">9876543210</span>
+                            </span>
+                            <span class="detail-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                                <span id="lbl-detail-place">Noida</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="badge badge-active" id="lbl-detail-status">Active</span>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div class="glass-card" style="padding: 1rem;">
+                        <span class="stat-label" style="font-size: 0.75rem;">Loan Principal</span>
+                        <div style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 700; color: var(--color-primary-light);" id="lbl-detail-principal">₹10,000</div>
+                        <span style="font-size: 0.75rem; color: var(--text-secondary);" id="lbl-detail-date">Given: 2026-06-15</span>
+                    </div>
+                    <div class="glass-card" style="padding: 1rem;">
+                        <span class="stat-label" style="font-size: 0.75rem;">Target Installment</span>
+                        <div style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 700; color: var(--color-success);" id="lbl-detail-weekly">₹1,200/wk</div>
+                        <span style="font-size: 0.75rem; color: var(--text-secondary);" id="lbl-detail-weeks-count">For 10 Weeks</span>
+                    </div>
+                </div>
+
+                <div class="ledger-section-title">
+                    <span>Weekly Installment Schedule</span>
+                    <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-secondary);" id="lbl-detail-progress-fraction">Paid: 3/10 weeks (₹3,600)</span>
+                </div>
+
+                <div class="installments-list" id="detail-installments-list">
+                    <!-- Dynamic Rows go here -->
+                </div>
+                
+                <div class="form-group full-width" style="margin-top: 1rem;">
+                    <label>Remarks</label>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); background: rgba(0,0,0,0.15); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-style: italic;" id="lbl-detail-remarks">No remarks provided.</p>
+                </div>
+            </div>
+            <div class="modal-footer" style="justify-content: space-between;">
+                <button type="button" class="btn btn-danger" id="btn-delete-client">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        <line x1="10" y1="11" x2="10" y2="17"/>
+                        <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                    Delete File
+                </button>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button type="button" class="btn btn-secondary" id="btn-edit-client">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="14 2 18 6 7 17 3 17 3 13 14 2"/>
+                            <line x1="3" y1="17" x2="21" y2="17"/>
+                        </svg>
+                        Edit Details
+                    </button>
+                    <button type="button" class="btn btn-primary" id="btn-close-ledger">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Profile Modal -->
+    <div class="modal-overlay" id="modal-profile" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 class="modal-title" id="profile-modal-title">Update Profile</h2>
+                <button class="modal-close" id="btn-close-profile-modal" aria-label="Close profile dialog">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-hero">
+                    <div class="profile-hero-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="profile-hero-label">Client Profile</span>
+                        <h3 class="profile-hero-title">Manage your account</h3>
+                    </div>
+                </div>
+                <form id="form-profile" novalidate>
+                    <input type="hidden" id="field-profile-id">
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label for="field-profile-name">Client Name</label>
+                            <input type="text" id="field-profile-name" class="input-field" placeholder="Enter full name">
+                        </div>
+                        <div class="form-field">
+                            <label for="field-profile-mobile">Mobile Number</label>
+                            <input type="text" id="field-profile-mobile" class="input-field" placeholder="10-digit mobile number">
+                        </div>
+                        <div class="form-field">
+                            <label for="field-profile-place">Place / Location</label>
+                            <input type="text" id="field-profile-place" class="input-field" placeholder="Enter your place">
+                        </div>
+                        <div class="form-field form-field-full">
+                            <label for="field-profile-remarks">Remarks</label>
+                            <textarea id="field-profile-remarks" class="input-field" rows="3" placeholder="Add remarks"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="btn-cancel-profile">Cancel</button>
+                <button type="submit" class="btn btn-primary" form="form-profile" id="btn-save-profile">Save Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backup & Settings Modal -->
+    <div class="modal-overlay" id="modal-backup" role="dialog" aria-modal="true" aria-labelledby="backup-modal-title">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 class="modal-title" id="backup-modal-title">Backup & Restore</h2>
+                <button class="modal-close" id="btn-close-backup-modal" aria-label="Close dialog">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                    Your data is stored locally in this browser. Exporting allows you to keep a backup file on your computer to restore later if you switch devices or clear browser caches.
+                </p>
+
+                <!-- Export Block -->
+                <div class="glass-card" style="padding: 1.25rem; margin-bottom: 1.25rem; border-color: rgba(139, 92, 246, 0.2);">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary-light);">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="8 12 12 16 16 12"/>
+                            <line x1="12" y1="8" x2="12" y2="16"/>
+                        </svg>
+                        Export Backup File
+                    </h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        Download a <code>.json</code> file containing all your current client records and payment history.
+                    </p>
+                    <button class="btn btn-primary" id="btn-export-data" style="width: 100%;">
+                        Download Backup
+                    </button>
+                </div>
+
+                <!-- Import Block -->
+                <div class="glass-card" style="padding: 1.25rem; margin-bottom: 1.25rem; border-color: rgba(16, 185, 129, 0.2);">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-success);">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="16 12 12 8 8 12"/>
+                            <line x1="12" y1="16" x2="12" y2="8"/>
+                        </svg>
+                        Import Backup File
+                    </h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        Select a previously exported <code>.json</code> backup file to restore your client records.
+                    </p>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <input type="file" id="import-file-input" accept=".json" style="display: none;">
+                        <button class="btn btn-secondary" id="btn-import-trigger" style="flex: 1;">
+                            Select Backup File
+                        </button>
+                        <button class="btn btn-primary" id="btn-import-execute" style="flex: 1;" disabled>
+                            Upload & Restore
+                        </button>
+                    </div>
+                    <span id="lbl-import-status" style="font-size: 0.8rem; margin-top: 0.5rem; display: block; color: var(--text-muted);">No file selected.</span>
+                </div>
+
+                <!-- Reset Block -->
+                <div class="glass-card" style="padding: 1.25rem; border-color: rgba(244, 63, 94, 0.2); background: rgba(244, 63, 94, 0.02);">
+                    <h3 style="font-size: 1.1rem; color: var(--color-danger); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <octagon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        Factory Reset
+                    </h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        WARNING: This will permanently delete all client accounts and payment histories. This cannot be undone.
+                    </p>
+                    <button class="btn btn-danger" id="btn-reset-app" style="width: 100%;">
+                        Delete All Data
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="btn-close-backup">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container" aria-live="polite">
+        <!-- Toast elements dynamically generated -->
+    </div>
+
+    <script src="js/bundle.js?v=20260616"></script>
+</body>
+</html>

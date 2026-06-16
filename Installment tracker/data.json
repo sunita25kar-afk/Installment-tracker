@@ -1,0 +1,88 @@
+{
+  "clients": [
+    {
+      "id": "client_1781622949559_0hh5qwjyu",
+      "name": "vk",
+      "mobile": "9301566237",
+      "place": "chopna",
+      "dateGiven": "2026-06-16",
+      "principal": 20000,
+      "weeklyReturn": 2400,
+      "weeksCount": 10,
+      "remarks": "",
+      "installments": [
+        {
+          "weekIndex": 1,
+          "dueDate": "2026-06-23",
+          "status": "pending",
+          "paidDate": null,
+          "paidAmount": null
+        },
+        {
+          "weekIndex": 2,
+          "dueDate": "2026-06-30",
+          "status": "pending",
+          "paidDate": null,
+          "paidAmount": null
+        },
+        {
+          "weekIndex": 3,
+          "dueDate": "2026-07-07",
+          "status": "pending",
+          "paidDate": null,
+          "paidAmount": null
+        },
+        {
+          "weekIndex": 4,
+          "dueDate": "2026-07-14",
+          "status": "pending",
+          "paidDate": null,
+          "paidAmount": null
+        },
+        {
+          "weekIndex": 5,
+          "dueDate": "2026-07-21",
+          "status": "pending",
+          "paidDate": null,
+          "paidAmount": null
+        },
+        {
+          "weekIndex": 6,
+          "dueDate": "2026-07-28",
+          "status": "pending",
+          "paidDate": null,
+          "paidAmount": null
+        },
+        {
+          "weekIndex": 7,
+          "dueDate": "2026-08-04",
+          "status": "pending",
+          "paidDate": null,
+          "paidAmount": null
+        },
+        {
+          "weekIndex": 8,
+          "dueDate": "2026-08-11",
+          "status": "pending",
+          "paidDate": null,
+          "paidAmount": null
+        },
+        {
+          "weekIndex": 9,
+          "dueDate": "2026-08-18",
+          "status": "pending",
+          "paidDate": null,
+          "paidAmount": null
+        },
+        {
+          "weekIndex": 10,
+          "dueDate": "2026-08-25",
+          "status": "pending",
+          "paidDate": null,
+          "paidAmount": null
+        }
+      ],
+      "status": "active"
+    }
+  ]
+}
